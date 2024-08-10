@@ -55,7 +55,7 @@ git clone https://github.com/egomask/EgoMask-3DGS.git --recursive
 cd EgoMask-3DGS
 
 conda create -n EgoMask_env python=3.7
-conda activate EgoMask_env_env
+conda activate EgoMask_env
 
 # install pytorch
 pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 --extra-index-url https://download.pytorch.org/whl/cu116
