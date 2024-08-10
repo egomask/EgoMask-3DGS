@@ -41,7 +41,7 @@ We organize the datasets as follows:
 
 ## Pipeline
 
-![Teaser image](pipline\Egomask.png)
+![Teaser image](pipline/Egomask.png)
 
 
 
