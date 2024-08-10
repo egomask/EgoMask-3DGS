@@ -42,7 +42,7 @@ We organize the datasets as follows:
 ## Pipeline
 
 ![Teaser image](pipline/Egomask.png)
-We leverage 2D prior data, including hand masks and depth images, to guide the dynamic 3D Gaussian representation process. This approach enhances the capture of fine scene details and  improves the rendering performance of dynamic hand motions. 
+We leverage 2D prior data, including hand masks and depth images, to guide the dynamic 3D Gaussian representation process. This approach enhances the capture of fine scene details and  improves the rendering performance of dynamic hands. 
 
 
 
