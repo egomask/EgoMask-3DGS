@@ -18,7 +18,7 @@ from utils.image_utils import psnr
 from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams, OptimizationParams
 from utils.train_utils import plot_and_print_color, plot_and_print_feature, freeze_grad
-## python train.py -s data/marble -m output/test --fundation_model "DINOv2" --sematic_dimension 384
+
 try:
     from torch.utils.tensorboard import SummaryWriter
 
@@ -201,7 +201,7 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations):
 
             image_original_name = viewpoint_cam.image_name
             image_name = args.source_path + "/masks/" + str(image_original_name) + ".jpg"
-            depth_image_name = args.source_path + "/depth_gy/" + str(image_original_name) + "_depth.png"
+            depth_image_name = args.source_path + "/depth_gt/" + str(image_original_name) + "_depth.png"
             feature_image_gt = Image.open(str(image_name)).convert('RGB')
 
             # Define a transform to convert the image to a tensor
