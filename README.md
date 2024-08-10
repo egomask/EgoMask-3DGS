@@ -2,7 +2,7 @@
 
 ## [Project page](https://egomask.github.io/)
 
-![Teaser image](pipline\Output.png)
+![Teaser image](pipline/Output.png)
 
 This repository contains the official implementation associated with the paper "Egocentric 4D Complex Scene Rendering and Hands Decomposition with Deformable 3D Gaussian Splatting".
 
