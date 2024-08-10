@@ -72,18 +72,7 @@ def apply_high_pass_filter(data, sigma):
     return high_pass
 
 def gaussian_separate_with_filter(gaussians, sigma=3.0, percentage=85):
-    """
-    Separate the Gaussians based on their semantic features using a high-pass filter.
 
-    Args:
-        gaussians (GaussianModel): The Gaussian model containing the semantic features.
-        sigma (float): The standard deviation for the Gaussian kernel used in the high-pass filter.
-        percentage (float): The percentile threshold to separate the Gaussians.
-
-    Returns:
-        within_bound_indices (torch.Tensor): Indices of Gaussians within the principal distribution range.
-        outside_bound_indices (torch.Tensor): Indices of Gaussians outside the principal distribution range.
-    """
     # Extract the semantic features from the Gaussian model
     mask_feature = gaussians.get_mask_feature
     
@@ -195,7 +184,7 @@ def render(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Tensor, d_
 
 
 
-    rendered_image, depth, feature_map, radii = rasterizer(
+    rendered_image, depth, hands_mask_map, radii = rasterizer(
         means3D=means3D,
         means2D=means2D,
         shs=shs,
@@ -211,7 +200,7 @@ def render(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Tensor, d_
             "visibility_filter": radii > 0,
             "radii": radii,
             "depth": depth,
-            'hands_map': feature_map}
+            'hands_map': hands_mask_map}
 
 
 def render_static(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Tensor, d_xyz, d_rotation, d_scaling, is_6dof=False,
@@ -312,7 +301,7 @@ def render_static(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Ten
 
 
 
-    rendered_image, depth, feature_map, radii = rasterizer(
+    rendered_image, depth, hands_mask_map, radii = rasterizer(
         means3D=means3D,
         means2D=means2D,
         shs=shs,
@@ -328,7 +317,7 @@ def render_static(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Ten
             "visibility_filter": radii > 0,
             "radii": radii,
             "depth": depth,
-            'hands_map': feature_map}
+            'hands_map': hands_mask_map}
 
 
 def render_dynamic(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Tensor, d_xyz, d_rotation, d_scaling, is_6dof=False,
@@ -428,7 +417,7 @@ def render_dynamic(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Te
     mask_feature = mask_feature[outside_bound_indices].squeeze()
 
 
-    rendered_image, depth, feature_map, radii = rasterizer(
+    rendered_image, depth, hands_mask_map, radii = rasterizer(
         means3D=means3D,
         means2D=means2D,
         shs=shs,
@@ -444,4 +433,4 @@ def render_dynamic(viewpoint_camera, pc: GaussianModel, pipe, bg_color: torch.Te
             "visibility_filter": radii > 0,
             "radii": radii,
             "depth": depth,
-            'hands_map': feature_map}
+            'hands_map': hands_mask_map}

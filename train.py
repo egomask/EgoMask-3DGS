@@ -18,7 +18,6 @@ from utils.image_utils import psnr
 from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams, OptimizationParams
 from utils.train_utils import plot_and_print_color, plot_and_print_feature, freeze_grad
-from torch.cuda import memory_allocated, memory_reserved
 ## python train.py -s data/marble -m output/test --fundation_model "DINOv2" --sematic_dimension 384
 try:
     from torch.utils.tensorboard import SummaryWriter
@@ -191,7 +190,7 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations):
 
         # Render
         render_pkg = render(viewpoint_cam, gaussians, pipe, background, d_xyz, d_rotation, d_scaling, dataset.is_6dof)
-        feature_map, depth_image,image_color, viewspace_point_tensor, visibility_filter, radii = render_pkg["hands_map"], render_pkg["depth"], render_pkg["render"], render_pkg["viewspace_points"], render_pkg["visibility_filter"], render_pkg["radii"]
+        hands_mask_map, depth_image,image_color, viewspace_point_tensor, visibility_filter, radii = render_pkg["hands_map"], render_pkg["depth"], render_pkg["render"], render_pkg["viewspace_points"], render_pkg["visibility_filter"], render_pkg["radii"]
         gt_image = viewpoint_cam.original_image.cuda()
    
 
@@ -208,7 +207,7 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations):
             # Define a transform to convert the image to a tensor
             transform = transforms.ToTensor()
             feature_image_gt_tensor = transform(feature_image_gt).unsqueeze(0).to('cuda')  # Add batch dimension and move to CUDA
-            feature_map_gt = feature_image_gt_tensor.squeeze(0)
+            hands_mask_map_gt = feature_image_gt_tensor.squeeze(0)
 
             # Load ground truth depth image and convert it to a tensor
                 # Load ground truth depth image and convert it to a tensor
@@ -224,12 +223,12 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations):
             depth_min_pred, depth_max_pred = depth_image_pred_resized.min(), depth_image_pred_resized.max()
             depth_normalized_pred = (depth_image_pred_resized - depth_min_pred) / (depth_max_pred - depth_min_pred)
 
-            target_size = (feature_map_gt.shape[1], feature_map_gt.shape[2])  # (H, W)
-            feature_map_downsampled = F.interpolate(feature_map.unsqueeze(0), size=target_size, mode='bilinear', align_corners=True).squeeze(0)
+            target_size = (hands_mask_map_gt.shape[1], hands_mask_map_gt.shape[2])  # (H, W)
+            hands_mask_map_downsampled = F.interpolate(hands_mask_map.unsqueeze(0), size=target_size, mode='bilinear', align_corners=True).squeeze(0)
     
 
 
-            loss_feature = l1_loss(feature_map_downsampled, feature_map_gt)
+            loss_feature = l1_loss(hands_mask_map_downsampled, hands_mask_map_gt)
 
             Ll1 = l1_loss(image_color, gt_image)
             L_sim = ssim(image_color, gt_image)
@@ -275,14 +274,6 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations):
                 depth_normalized_pred = (depth_image_pred_resized - depth_min_pred) / (depth_max_pred - depth_min_pred)
 
                 loss_depth= l1_loss(depth_normalized_pred, depth_normalized_gt)
-
-                                # Print tensor sizes for debugging
-                # print(f"Ground truth depth image tensor size: {depth_normalized_gt.squeeze(0).size()}")
-                # print(f"Normalized ground truth depth min: {depth_min_gt}, max: {depth_max_gt}")
-                # print(f"Predicted depth image resized tensor size: {depth_normalized_pred.squeeze(0).size()}")
-                # print(f"Normalized predicted depth min: {depth_min_pred}, max: {depth_max_pred}")
-                # print(f"Loss depth: {loss_depth.item()}")
-
                 loss =  loss_color +0.5* opt.loss_reduce * loss_depth
 
 
