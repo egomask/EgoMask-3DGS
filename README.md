@@ -60,7 +60,7 @@ The components have different requirements w.r.t. both hardware and software. Th
 CUDA-ready GPU with Compute Capability 7.0+
 24 GB VRAM (doesn't test) 
 
-##" Software Requirements
+## Software Requirements
 Conda 
 C++ Compiler for PyTorch extensions, Visual Studio 2019 more stable (we used Visual Studio 2019 for Windows)
 CUDA SDK 11 for PyTorch extensions, install after Visual Studio (I used 11.6)
