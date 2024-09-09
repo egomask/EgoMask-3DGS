@@ -45,10 +45,29 @@ We organize the datasets as follows:
 We leverage 2D prior data, including hand masks and depth images, to guide the dynamic 3D Gaussian representation process. This approach enhances the capture of fine scene details and  improves the rendering performance of dynamic hands. 
 
 
+## Overview 
+
+The codebase has 2 main components: 
+A PyTorch-based optimizer to produce a 3D Gaussian model from SfM inputs
+A script to help you turn your own images into optimization-ready SfM data sets
+
+The components have different requirements w.r.t. both hardware and software. They have been tested on Windows 10
 
 ## Run
 
+### Hardware Requirements (import from the [3D Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting))
+
+CUDA-ready GPU with Compute Capability 7.0+
+24 GB VRAM (doesn't test) 
+
+##" Software Requirements
+Conda 
+C++ Compiler for PyTorch extensions, Visual Studio 2019 more stable (we used Visual Studio 2019 for Windows)
+CUDA SDK 11 for PyTorch extensions, install after Visual Studio (I used 11.6)
+C++ Compiler and CUDA SDK must be compatible
+
 ### Environment
+
 
 ```shell
 git clone https://github.com/egomask/EgoMask-3DGS.git --recursive
