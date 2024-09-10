@@ -11,3 +11,5 @@ imageio-ffmpeg
 scipy
 dearpygui
 lpips
+seaborn
+scikit-image
