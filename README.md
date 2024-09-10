@@ -95,7 +95,7 @@ python train.py -s path/to/Egomask/dataset -m output/exp-name --eval --is_blende
 ### Render & Evaluation
 
 ```shell
-python render.py -m output/exp-name --mode render
+python render.py -s path/to/Egomask/dataset data-m output/exp-name 
 python metrics.py -m output/exp-name
 ```
 
