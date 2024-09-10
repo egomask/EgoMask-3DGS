@@ -1,6 +1,9 @@
 submodules/mask-depth-diff-gaussian-rasterization
 submodules/simple-knn
 plyfile==0.8.1
+openai-clip
+matplotlib
+scikit-learn
 tqdm
 imageio==2.27.0
 opencv-python
